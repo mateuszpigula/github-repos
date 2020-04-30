@@ -1,4 +1,6 @@
+import { AxiosError } from "axios";
 import { SingleRepo } from "../interfaces/index";
+const container: Element = document.querySelector("#container")!;
 
 /**
  * Function for getting userName from repos node
@@ -56,13 +58,13 @@ const formatDate = (dateString: string): string =>
 	new Date(dateString).toLocaleString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric" });
 
 /**
- * Function for parsing repos array and returning div with repos' data
+ * Function for parsing repos array and displaying div with repos' data
  * @param {SingleRepo[]} repos - The array of repos in SingleRepo type
  * @param {string} username - The username to be displayed above table
- * @return {HTMLElement}
+ * @return {void}
  */
-export const displayTable = (repos: SingleRepo[], username: string): string => {
-	return `<div class="table__wrapper">
+export const displayTable = (repos: SingleRepo[], username: string): void => {
+	const divElement = `<div class="table__wrapper">
 		<h2 class="username">${username}</h2>
 		<table class="table">
 			<thead>
@@ -88,4 +90,27 @@ export const displayTable = (repos: SingleRepo[], username: string): string => {
 			</tbody>
 		</table>
 	</div>`;
+
+	container.innerHTML += divElement;
+};
+
+/**
+ * Function for parsing errors and displaying them for user
+ * @param {AxiosError} error - Error catched in axios request
+ * @param {string} username - The username to be used in error
+ * @return {void}
+ */
+export const handleError = (error: AxiosError, username: string): void => {
+	const responses: { [key: string]: string } = {
+		"401": "You are not authorized to fetch data from Github.",
+		"404": `User: ${username} doesn't exist`,
+		default: "Oops, something went wrong. Please try again later.",
+	};
+	const errStatus = error.response?.status;
+
+	const divElement = `<div class="error">
+		${responses[errStatus || "default"]}
+	</div>`;
+
+	container.innerHTML += divElement;
 };
