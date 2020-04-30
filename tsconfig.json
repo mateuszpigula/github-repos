@@ -5,7 +5,12 @@
 		"module": "es6",
 		"target": "es5",
 		"allowJs": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"strict": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"moduleResolution": "node",
+		"lib": ["es2015", "DOM"]
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "**/*.spec.ts"]
