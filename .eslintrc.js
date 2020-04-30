@@ -18,5 +18,7 @@ module.exports = {
 	},
 	rules: {
 		"@typescript-eslint/no-var-requires": 0,
+		"@typescript-eslint/no-non-null-assertion": 0,
+		"@typescript-eslint/camelcase": 0,
 	},
 };

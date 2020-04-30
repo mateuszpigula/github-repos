@@ -1,15 +1,20 @@
-import { getDetails, getFilteredRepos } from "./utils/index";
-import { SingleRepo } from "./types/index";
+import "./scss/style.scss";
+import { SingleRepo } from "./interfaces/index";
+import { getDetails, getFilteredRepos, displayTable } from "./utils/index";
 import { getUserRepos } from "./api/index";
 
 const repos: NodeListOf<Element> = document.querySelectorAll("repos");
+const container: Element = document.querySelector("#container")!;
 
 const parseTagToDiv = async (repos: NodeListOf<Element>): Promise<void> => {
-	for (const repo of Array.from(repos)) {
+	repos.forEach((repo) => {
 		const { username, date } = getDetails(repo);
-		const { data: userRepos } = await getUserRepos(username);
-		const filteredRepos: SingleRepo[] = getFilteredRepos(userRepos, date);
-	}
+		getUserRepos(username).then(({ data: userRepos }) => {
+			const filteredRepos: SingleRepo[] = getFilteredRepos(userRepos, date);
+
+			container.innerHTML += displayTable(filteredRepos, username);
+		});
+	});
 };
 
 if (repos) {
